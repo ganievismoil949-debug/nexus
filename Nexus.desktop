@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Nexus
+Comment=Your local AI companion
+Exec="/home/admins/Documents/Codex/2026-10-25/f/outputs/nexus/Launch Nexus.sh"
+Icon=/home/admins/Documents/Codex/2026-10-25/f/outputs/nexus/static/icon.svg
+Terminal=false
+Categories=Utility;

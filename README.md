@@ -1,4 +1,4 @@
-# Nexus — local AI desktop assistant
+# Nexus — local desktop assistant, v0.1
 
 Nexus is an English desktop assistant for Zorin OS. A polished pearl-like animated companion lives at the center of Home, with separate Chat and Memory pages and Settings at the bottom left. Click the Nexus logo to smoothly switch the sidebar between labels and icons. The character reacts while listening, thinking and speaking, and pauses its motion when the window is hidden. Its face is drawn in SVG and needs no graphics card.
 
@@ -25,12 +25,6 @@ Type in Chat, or press **Talk to Nexus** and speak English during the eight-seco
 - `Read my unread Gmail messages` — after connecting your account.
 
 Explicit create/save commands preserve the supplied text directly. Other requests use the local language model to select an available action. Recent conversation helps resolve short follow-ups such as “delete it”; Nexus asks which item you mean when the target is unclear, and moves only one identified item to recoverable Trash. Small local models can still misunderstand complex instructions, so inspect Activity in Settings. You can stop before the next action, but an action already completed is not undone. Files are never intentionally overwritten.
-
-## Try a stronger model in Google Colab
-
-Open [`Nexus_Colab_GPU.ipynb`](Nexus_Colab_GPU.ipynb) in Google Colab, select a GPU runtime, and run the cells from top to bottom. The notebook uses Ollama with Qwen 3.5 9B by default; choose 4B in its first code cell if the assigned GPU has limited memory. Colab GPU types and availability change over time, and free runtimes can be stopped. The notebook keeps its chat in the Colab session and does not connect a public tunnel or access your Zorin computer. It is a model chat lab, not GPU acceleration for Nexus's local desktop-control tools.
-
-Release snapshots are marked with Git tags: `v0.1.0` is the local desktop version and `v0.2.0` adds this Colab notebook.
 
 ## Offline operation and voice
 

@@ -1,0 +1,17 @@
+.venv/
+.data/
+assets/
+__pycache__/
+*.py[cod]
+*.sqlite*
+*.db
+*.session
+.env
+.env.*
+!.env.example
+*.onnx
+*.zip
+*.partial
+preview*.jpg
+.ipynb_checkpoints/
+.git-data/

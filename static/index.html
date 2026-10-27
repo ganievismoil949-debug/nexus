@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="nexus-token" content="__NEXUS_TOKEN__"><meta name="color-scheme" content="light dark"><title>Nexus</title><link rel="icon" href="/icon.svg"><link rel="stylesheet" href="/style.css"><script src="/icons.js" defer></script><script src="/app.js" defer></script></head>
+<body>
+<div id="nexus-shell" data-motion="on" data-collapsed="false" data-active-page="home" data-visible="true" data-busy="false">
+  <div class="n-window">
+    <nav class="n-sidebar" aria-label="Main navigation">
+      <button class="n-brand" id="sidebar-toggle" aria-expanded="true" aria-label="Collapse sidebar" title="Collapse sidebar"><span class="n-brand-mark"><svg viewBox="0 0 48 48" aria-hidden="true"><defs><radialGradient id="brand-pearl" cx="30%" cy="18%"><stop stop-color="#fff"/><stop offset=".64" stop-color="#f8f4ff"/><stop offset="1" stop-color="#cfbfee"/></radialGradient></defs><path d="M10 27c-6-2-9 2-8 6s5 5 10 3zm28 0c6-2 9 2 8 6s-5 5-10 3z" fill="url(#brand-pearl)" stroke="#fff"/><path d="M24 4c12 0 19 9 19 21s-6 20-19 20S5 37 5 25 12 4 24 4z" fill="url(#brand-pearl)" stroke="#fff" stroke-width="1.2"/><path d="M13 13q5-6 12-6" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/><rect x="17" y="17" width="4" height="10" rx="2" fill="#8b6fe3"/><rect x="28" y="17" width="4" height="10" rx="2" fill="#8b6fe3"/><path d="M21 32q3 3 6 0" fill="none" stroke="#aa90df" stroke-width="1.4" stroke-linecap="round"/></svg></span><span class="n-brand-text">nexus</span></button>
+      <button class="n-nav" data-page="home" aria-current="page" aria-label="Home" title="Home"><i data-lucide="house"></i><span class="n-nav-label">Home</span></button>
+      <button class="n-nav" data-page="chat" aria-label="Chat" title="Chat"><i data-lucide="message-circle"></i><span class="n-nav-label">Chat</span></button>
+      <button class="n-nav" data-page="memory" aria-label="Memory" title="Memory"><i data-lucide="brain"></i><span class="n-nav-label">Memory</span></button>
+      <div class="n-sidebar-bottom"><button class="n-nav" data-page="settings" aria-label="Settings" title="Settings"><i data-lucide="settings-2"></i><span class="n-nav-label">Settings</span></button><div class="n-profile"><span class="n-dot"></span><span class="n-profile-text">Personal workspace</span></div></div>
+    </nav>
+    <div class="n-main">
+      <header class="n-top"><span class="n-page-title" id="page-title">Home</span><span class="n-top-status" id="engine-status">Connecting to your local AI…</span><button class="n-button n-stop" id="stop-button" disabled><i data-lucide="square"></i> Stop</button></header>
+      <main class="n-content">
+        <section class="n-page n-home" data-panel="home" data-mood="idle" aria-label="Home">
+          <div class="n-eyebrow"><span class="n-presence-dot" aria-hidden="true"></span>Your personal companion</div>
+          <div class="n-stage">
+            <span class="n-aura" aria-hidden="true"></span>
+            <span class="n-orbit-ring" aria-hidden="true"></span>
+            <span class="n-orbit-dot" aria-hidden="true"></span>
+            <span class="n-sound-wave wave-one" aria-hidden="true"></span>
+            <span class="n-sound-wave wave-two" aria-hidden="true"></span>
+            <span class="n-sound-wave wave-three" aria-hidden="true"></span>
+            <button class="n-character" id="companion-button" type="button" aria-label="Say hello to Nexus" title="Say hello">
+              <svg class="n-character-art" viewBox="0 0 240 230" aria-hidden="true">
+                <defs>
+                  <radialGradient id="n-shell" cx="29%" cy="19%" r="90%"><stop stop-color="#fff"/><stop offset=".45" stop-color="#fdfbff"/><stop offset=".76" stop-color="#e9e1fa"/><stop offset="1" stop-color="#bba8e7"/></radialGradient>
+                  <linearGradient id="n-limb" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".65" stop-color="#eae2fa"/><stop offset="1" stop-color="#c4b2ed"/></linearGradient>
+                  <linearGradient id="n-eye" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#6352da"/><stop offset=".55" stop-color="#8971ef"/><stop offset="1" stop-color="#b39df7"/></linearGradient>
+                  <linearGradient id="n-rim" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".5" stop-color="#f3edff"/><stop offset="1" stop-color="#af99dc"/></linearGradient>
+                  <radialGradient id="n-cheek"><stop stop-color="#e8b1db" stop-opacity=".5"/><stop offset="1" stop-color="#e8b1db" stop-opacity="0"/></radialGradient>
+                </defs>
+                <g class="n-arm left"><path d="M58 131c-15-6-30 2-32 15-3 15 10 25 25 21l17-11z" fill="url(#n-limb)" stroke="#fff" stroke-width="2.3"/><path d="M35 144c3-5 8-7 14-7" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></g>
+                <g class="n-arm right"><path d="M182 131c15-6 30 2 32 15 3 15-10 25-25 21l-17-11z" fill="url(#n-limb)" stroke="#fff" stroke-width="2.3"/><path d="M205 144c-3-5-8-7-14-7" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></g>
+                <path d="M120 28c44 0 73 32 75 77 3 48-20 94-75 94s-78-46-75-94c2-45 31-77 75-77z" fill="url(#n-shell)" stroke="url(#n-rim)" stroke-width="3"/>
+                <path d="M73 64c11-16 27-24 45-24" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".95"/>
+                <path d="M65 78l-2 5" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".8"/>
+                <path d="M163 52c12 12 18 27 20 43" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".65"/>
+                <ellipse cx="73" cy="102" rx="18" ry="38" fill="#fff" opacity=".12" transform="rotate(17 73 102)"/>
+                <path d="M71 167c12 15 29 22 49 22 23 0 43-10 56-28" fill="none" stroke="#e0d3f6" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+                <g class="n-face">
+                  <ellipse cx="87" cy="122" rx="17" ry="12" fill="url(#n-cheek)"/><ellipse cx="154" cy="122" rx="17" ry="12" fill="url(#n-cheek)"/>
+                  <g class="n-eyes-open">
+                    <g class="n-eye"><rect x="96" y="83" width="14" height="36" rx="7" fill="url(#n-eye)"/><ellipse cx="100" cy="90" rx="2" ry="3" fill="#fff" opacity=".8"/></g>
+                    <g class="n-eye"><rect x="131" y="83" width="14" height="36" rx="7" fill="url(#n-eye)"/><ellipse cx="135" cy="90" rx="2" ry="3" fill="#fff" opacity=".8"/></g>
+                  </g>
+                  <g class="n-eyes-happy" fill="none" stroke="url(#n-eye)" stroke-width="7" stroke-linecap="round"><path d="M97 106q6-12 12 0"/><path d="M132 106q6-12 12 0"/></g>
+                  <path class="n-mouth-idle" d="M113 132q7 7 14 0" fill="none" stroke="#a28ade" stroke-width="2.5" stroke-linecap="round"/>
+                  <ellipse class="n-mouth-open" cx="120" cy="134" rx="5" ry="6" fill="#9b7ddc"/>
+                </g>
+                <g class="n-chest-core"><circle cx="120" cy="174" r="8" fill="#fff" fill-opacity=".65" stroke="#cfbff0" stroke-width="1.3"/><circle class="n-core-light" cx="120" cy="174" r="3.3" fill="#a98deb"/><circle cx="119" cy="173" r="1" fill="#fff" opacity=".8"/></g>
+              </svg>
+            </button>
+            <span class="n-spark spark-one" aria-hidden="true">✦</span><span class="n-spark spark-two" aria-hidden="true">✧</span><span class="n-spark spark-three" aria-hidden="true">✦</span>
+            <div class="n-thought" aria-hidden="true"><b></b><b></b><b></b></div>
+            <span class="n-stage-shadow" aria-hidden="true"></span>
+          </div>
+          <h2 id="home-heading">Right here with you.</h2><p class="n-sub" id="home-subtitle">A familiar face. A helping hand.</p>
+          <button class="n-button primary n-talk" id="talk-button"><i data-lucide="mic"></i><span id="talk-label">Talk to Nexus</span></button>
+          <div class="n-home-status" id="home-status" aria-live="polite">English · Private, local processing</div>
+          <p class="n-home-answer" id="home-answer" aria-live="polite"></p>
+          <div class="n-quick-actions"><button data-quick="Open YouTube"><i data-lucide="play"></i> YouTube</button><button data-quick="Read my unread Gmail messages"><i data-lucide="mail"></i> Gmail</button><button data-quick="Read my unread Telegram messages"><i data-lucide="send"></i> Telegram</button></div>
+        </section>
+        <section class="n-page n-chat" data-panel="chat" aria-label="Chat" hidden>
+          <div class="n-heading"><div><h2>Let's talk.</h2><p class="n-sub">Your words. Real actions.</p></div><button class="n-button" id="new-chat"><i data-lucide="plus"></i> New chat</button></div>
+          <div class="n-messages" id="messages" role="log" aria-live="polite" aria-label="Conversation"></div>
+          <form class="n-compose" id="chat-form"><textarea id="chat-input" aria-label="Message Nexus" placeholder="Message Nexus…" maxlength="6000" rows="2"></textarea><div class="n-compose-bottom"><span class="n-small" id="chat-status">Everything you say stays on this computer.</span><button class="n-button primary" id="send-button" type="submit"><i data-lucide="arrow-up"></i> Send</button></div></form>
+        </section>
+        <section class="n-page n-memory" data-panel="memory" aria-label="Memory" hidden>
+          <h2>A little about you.</h2><p class="n-sub">Preferences you choose to remember. Saved on this computer.</p>
+          <form class="n-memory-form" id="memory-form"><input id="memory-input" aria-label="A preference to remember" placeholder="e.g. Keep my replies short" maxlength="1000"><button class="n-button" type="submit">Remember</button></form>
+          <div id="memory-list"></div><p class="n-small" id="memory-feedback" aria-live="polite"></p>
+        </section>
+        <section class="n-page n-settings" data-panel="settings" aria-label="Settings" hidden>
+          <h2>Make it feel like you.</h2><p class="n-sub">Your companion, your preferences.</p>
+          <div class="n-setting-group">
+            <label class="n-setting-row"><span><strong>Local AI model</strong><small id="model-hint">Automatic choice balances speed and memory</small></span><select id="model-select" aria-label="Local model"></select></label>
+            <div class="n-setting-row"><div><strong>Voice</strong><small id="voice-name">English male</small></div><button class="n-button" id="test-voice">Listen</button></div>
+            <label class="n-setting-row"><span><strong>Read replies aloud</strong><small>Offline speech on your computer</small></span><input class="n-switch" type="checkbox" id="auto-speak" checked></label>
+            <label class="n-setting-row"><span><strong>Character animation</strong><small>Movement and expressions</small></span><input class="n-switch" type="checkbox" id="animation" checked></label>
+          </div>
+          <p class="n-small" id="capabilities"></p>
+          <h3 class="n-section-title">Connected accounts</h3><p class="n-small">Reading messages needs internet. Nexus never sends messages from these connectors.</p>
+          <details class="n-account"><summary><i data-lucide="mail"></i> Gmail <span id="gmail-status">Not connected</span></summary><div class="n-account-content"><p>Use a Google app password. Your password is saved in the OS keyring when available.</p><a href="https://support.google.com/accounts/answer/185833">How to create an app password</a><form id="gmail-form"><label>Gmail address<input name="email" type="email" autocomplete="off" required></label><label>App password<input name="password" type="password" autocomplete="off" required></label><button class="n-button primary" type="submit">Connect Gmail</button><button class="n-button" type="button" data-disconnect="gmail">Disconnect</button></form></div></details>
+          <details class="n-account"><summary><i data-lucide="send"></i> Telegram <span id="telegram-status">Not connected</span></summary><div class="n-account-content"><p>Sign in to your own Telegram account. Get your application credentials from <a href="https://my.telegram.org/apps">my.telegram.org</a>.</p><form id="telegram-form"><label>API ID<input name="api_id" inputmode="numeric" required></label><label>API hash<input name="api_hash" type="password" autocomplete="off" required></label><label>Phone number<input name="phone" type="tel" placeholder="+992…" required></label><button class="n-button primary" type="submit">Request login code</button><button class="n-button" type="button" data-disconnect="telegram">Disconnect</button></form><form id="telegram-code-form" hidden><label>Login code<input name="code" autocomplete="one-time-code"></label><label id="telegram-2fa" hidden>Two-step verification password<input name="password" type="password" autocomplete="off"></label><button class="n-button primary" type="submit">Finish sign-in</button></form></div></details>
+          <p class="n-small" id="account-feedback" aria-live="polite"></p>
+          <h3 class="n-section-title">Activity</h3><p class="n-small">Actual tool results. Deleted files go to Trash.</p><button class="n-button" id="refresh-activity">Refresh activity</button><div id="activity-list"></div>
+        </section>
+      </main>
+      <footer class="n-footer"><span>Nexus <span class="n-footer-separator">/</span> Your space to think</span><span><span class="n-dot" aria-hidden="true"></span> On-device · English</span></footer>
+    </div>
+  </div>
+  <div id="toast" role="status" aria-live="polite" hidden></div>
+</div>
+</body></html>
