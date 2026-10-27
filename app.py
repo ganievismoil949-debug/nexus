@@ -69,10 +69,15 @@ class Application:
     def status(self):
         models=self.agent.models()
         selected=self.store.setting('model','auto')
-        recommended=self.agent.recommended_model(models)
+        engine=self.store.setting('ai_mode','local')
         resolved=self.agent.selected_model(models)
+        recommended=resolved if engine=='remote' else self.agent.recommended_model(models)
         return {'models':models,'model':selected,'recommended_model':recommended,'resolved_model':resolved,
                 'ready':bool(resolved),
+                'engine':engine,
+                'remote_endpoint':self.store.setting('remote_endpoint',''),
+                'remote_token_set':bool(self.store.setting('remote_token','')),
+                'model_error':self.agent._model_error,
                 'voice':self.voice.status(),'auto_speak':self.store.setting('auto_speak',True),
                 'animation':self.store.setting('animation',True),'collapsed':self.store.setting('collapsed',False),
                 'session':os.environ.get('XDG_SESSION_TYPE','unknown'),
@@ -172,12 +177,35 @@ def make_handler(app):
                 elif path=='/api/forget':
                     app.store.forget(str(body.get('id','')));result={'removed':True}
                 elif path=='/api/settings':
+                    current_mode=app.store.setting('ai_mode','local')
+                    next_mode=body.get('ai_mode',current_mode)
+                    if next_mode not in ('local','remote'):
+                        raise ValueError('Choose Local or Remote AI.')
+                    next_endpoint=app.store.setting('remote_endpoint','')
+                    if 'remote_endpoint' in body:
+                        raw_endpoint=str(body['remote_endpoint']).strip()
+                        next_endpoint=Agent.validate_remote_endpoint(raw_endpoint) if raw_endpoint else ''
+                    next_token=app.store.setting('remote_token','')
+                    if body.get('clear_remote_token') is True:
+                        next_token=''
+                    elif 'remote_token' in body and str(body['remote_token']).strip():
+                        next_token=str(body['remote_token']).strip()
+                    if next_mode=='remote' and not next_endpoint:
+                        raise ValueError('Enter the HTTPS base URL of an Ollama-compatible model server.')
+                    app.store.set_setting('ai_mode',next_mode)
+                    app.store.set_setting('remote_endpoint',next_endpoint)
+                    app.store.set_setting('remote_token',next_token)
+                    if next_mode!=current_mode and 'model' not in body:
+                        app.store.set_setting('model','auto')
+                    if next_mode!=current_mode or 'remote_endpoint' in body or 'remote_token' in body or body.get('clear_remote_token'):
+                        with app.agent._models_lock:
+                            app.agent._models_at=-100.0
                     for key in ['animation','collapsed','auto_speak']:
                         if key in body and isinstance(body[key],bool):
                             app.store.set_setting(key,body[key])
                     if 'model' in body:
                         if body['model']!='auto' and body['model'] not in app.agent.models():
-                            raise ValueError('Choose an installed local model.')
+                            raise ValueError('Choose a model provided by the selected AI server.')
                         app.store.set_setting('model',body['model'])
                     result={'saved':True}
                 elif path=='/api/voice/listen':

@@ -209,5 +209,23 @@ class HTTPTests(unittest.TestCase):
         with self.request('/api/memories') as response:self.assertEqual(json.load(response)[0]['id'],identity)
         with self.request('/api/forget',{'id':identity}):pass
 
+    def test_remote_model_settings_validate_endpoint_and_hide_token(self):
+        with self.assertRaises(urllib.error.HTTPError) as error:
+            self.request('/api/settings',{'ai_mode':'remote','remote_endpoint':'http://models.example','remote_token':'do-not-return'}).close()
+        self.assertEqual(error.exception.code,400)
+        self.assertEqual(self.store.setting('remote_token',''),'')
+        with self.request('/api/settings',{'ai_mode':'remote','remote_endpoint':'https://models.example','remote_token':'private-test-token'}) as response:
+            self.assertTrue(json.load(response)['saved'])
+        with self.request('/api/status') as response:
+            status=json.load(response)
+        self.assertEqual(status['engine'],'remote')
+        self.assertTrue(status['remote_token_set'])
+        self.assertNotIn('remote_token',status)
+        self.assertEqual(status['remote_endpoint'],'https://models.example')
+        with self.request('/api/settings',{'clear_remote_token':True,'ai_mode':'local'}) as response:
+            self.assertTrue(json.load(response)['saved'])
+        self.assertEqual(self.store.setting('remote_token',''),'')
+        self.assertEqual(self.store.setting('ai_mode'),'local')
+
 
 if __name__=='__main__':unittest.main()

@@ -30,7 +30,7 @@
     busy=value;const active=value||listening||voicePreview;root.dataset.busy=String(active);
     $('send-button').disabled=active;$('new-chat').disabled=active;$('talk-button').disabled=active;$('test-voice').disabled=active;$('stop-button').disabled=!active;
     root.querySelectorAll('[data-quick]').forEach(b=>b.disabled=active);
-    if(value)pending('Thinking locally…');else $('pending-message')?.remove();
+    if(value)pending(status.engine==='remote'?'Thinking with remote AI…':'Thinking locally…');else $('pending-message')?.remove();
   }
   root.dataset.visible=String(!document.hidden);
   document.addEventListener('visibilitychange',()=>{root.dataset.visible=String(!document.hidden);});
@@ -55,21 +55,35 @@
   async function loadHistory(){const history=await api('history');$('messages').replaceChildren();if(!history.length)message('assistant',"I'm here. What would you like to do?");else history.forEach(m=>message(m.role,m.content,false));}
   async function refresh(initial=false){
     status=await api('status');
-    $('engine-status').textContent=status.ready?'Local AI · '+status.resolved_model+(status.model==='auto'?' · Auto':''):'Local AI unavailable · Check Settings';
+    const remote=status.engine==='remote';
+    $('engine-status').textContent=status.ready?(remote?'Remote AI · ':'Local AI · ')+status.resolved_model+(status.model==='auto'?' · Auto':''):(remote?'Remote AI unavailable · Check Settings':'Local AI unavailable · Check Settings');
     $('voice-name').textContent=status.voice.speech;
     $('auto-speak').checked=status.auto_speak;$('animation').checked=status.animation;root.dataset.motion=status.animation?'on':'off';
     $('gmail-status').textContent=status.gmail||'Not connected';$('telegram-status').textContent=status.telegram?'Connected':'Not connected';
-    $('capabilities').textContent=(status.voice.recognition?'Offline listening ready. ':'Offline listening needs setup.sh. ')+'Desktop session: '+status.session+'. Accessibility support depends on each application.';
+    $('home-status').textContent=remote?'Remote AI · current chat context goes to the configured server.':'English · Private, local processing';
+    $('chat-status').textContent=remote?'Current chat context goes to the remote server; saved history stays on this device.':'Everything you say stays on this computer.';
+    $('processing-location').textContent=remote?'Remote model · local actions · English':'On-device · English';
+    $('capabilities').textContent=(remote?'AI runs on the remote server; desktop actions stay on this Zorin computer. ':'')+(status.voice.recognition?'Offline listening ready. ':'Offline listening needs setup.sh. ')+'Desktop session: '+status.session+'. Accessibility support depends on each application.';
+    $('ai-mode').value=status.engine;
+    $('remote-model-settings').hidden=!remote;
+    $('remote-endpoint').value=status.remote_endpoint||'';
+    $('remote-token-state').textContent=status.remote_token_set?'A token is stored in Nexus local data. Leave blank to keep it.':'No access token saved. Leave blank only for a protected network or a server that does not require one.';
+    $('forget-remote-token').disabled=!status.remote_token_set;
+    if(remote&&status.model_error)$('remote-model-feedback').textContent=status.model_error;
+    else if(remote&&status.ready)$('remote-model-feedback').textContent='Connected. Current chat context is sent to this server; the saved conversation stays on this computer.';
+    else if(remote)$('remote-model-feedback').textContent='Enter an HTTPS Ollama-compatible endpoint, then choose Save and connect. Remote mode sends chat context over the internet.';
     const select=$('model-select');select.replaceChildren();
-    if(!status.models.length){const o=new Option('Start Ollama first','');select.add(o);$('model-hint').textContent='Install Ollama and one local model to begin.';}
+    if(!status.models.length){const o=new Option(remote?'Connect a remote model server':'Start Ollama first','');select.add(o);$('model-hint').textContent=remote?(status.model_error||'Enter the remote server URL and token, then connect.'):'Install Ollama and one local model to begin.';}
     else {
-      select.add(new Option(status.recommended_model?'Automatic · '+status.recommended_model:'Automatic · no model fits current memory','auto',false,status.model==='auto'));
+      select.add(new Option(status.recommended_model?'Automatic · '+status.recommended_model:(remote?'Automatic · first available model':'Automatic · no model fits current memory'),'auto',false,status.model==='auto'));
       status.models.forEach(model=>{
         const labels={'qwen2.5:1.5b':'Qwen 2.5 1.5B · compact','qwen3:0.6b':'Qwen 3 0.6B','qwen3.5:0.8b':'Qwen 3.5 0.8B','qwen3.5:2b-q4_K_M':'Qwen 3.5 2B Q4 · balanced','qwen3.5:4b-q4_K_M':'Qwen 3.5 4B Q4 · higher memory','qwen3.5:2b':'Qwen 3.5 2B','qwen3.5:4b':'Qwen 3.5 4B · higher memory'};
         const title=(labels[model]||model)+(model===status.recommended_model?' · recommended':'');
         select.add(new Option(title,model,false,model===status.model));
       });
-      $('model-hint').textContent=status.recommended_model
+      $('model-hint').textContent=remote
+        ? 'Choose a model installed on the remote server. The server provides its model list.'
+        : status.recommended_model
         ? 'Auto chooses an installed model within available memory. Current choice: '+status.recommended_model+'. Speed depends on your computer and request.'
         : status.model!=='auto'&&!status.resolved_model
           ? 'The selected model is unavailable. Choose Automatic or an installed model.'
@@ -81,15 +95,15 @@
     try{
       const job=await api('jobs/'+identity);
       if(currentJob!==identity)return;
-      if(job.done){setBusy(false);currentJob=null;mood(job.error?'idle':'happy');const seconds=(Math.max(0,job.elapsed_ms||0)/1000).toFixed((job.elapsed_ms||0)<10000?1:0);$('chat-status').textContent=job.engine==='model'?'Answered with '+(job.model||'local AI')+' in '+seconds+'s · saved on this computer.':'Completed locally in '+seconds+'s.';$('home-status').textContent='Ready when you are.';$('home-answer').textContent=job.answer;message('assistant',job.answer);if(job.voice_error)toast(job.voice_error);return;}
-      const label=job.stage==='speaking'?'Speaking…':job.stage==='working'?'Working: '+(job.current_action||'your request'):'Thinking locally…';
+      if(job.done){setBusy(false);currentJob=null;mood(job.error?'idle':'happy');const seconds=(Math.max(0,job.elapsed_ms||0)/1000).toFixed((job.elapsed_ms||0)<10000?1:0);$('chat-status').textContent=job.engine==='model'?'Answered with '+(job.model||'AI')+' in '+seconds+'s'+(job.remote?' · chat context sent remotely; history saved locally.':' · saved on this computer.'): 'Completed locally in '+seconds+'s.';$('home-status').textContent='Ready when you are.';$('home-answer').textContent=job.answer;message('assistant',job.answer);if(job.voice_error)toast(job.voice_error);return;}
+      const label=job.stage==='speaking'?'Speaking…':job.stage==='working'?'Working: '+(job.current_action||'your request'):(job.remote?'Thinking with remote AI…':'Thinking locally…');
       mood(job.stage==='speaking'?'speaking':'thinking');if(job.stage==='speaking')$('home-answer').textContent=job.answer;$('chat-status').textContent=label;$('home-status').textContent=label;pending(label);
       setTimeout(()=>poll(identity),document.hidden?1600:700);
     }catch(e){setBusy(false);currentJob=null;mood('idle');toast(e.message);}
   }
   async function send(text){
     if(busy||listening||voicePreview||!text.trim())return;
-    setBusy(true);mood('thinking');$('home-answer').textContent='';$('home-status').textContent='Thinking locally…';$('chat-status').textContent='Thinking locally…';
+    setBusy(true);mood('thinking');$('home-answer').textContent='';const thinking=status.engine==='remote'?'Thinking with remote AI…':'Thinking locally…';$('home-status').textContent=thinking;$('chat-status').textContent=thinking;
     try{const result=await api('chat',{text:text.trim()});message('user',text.trim());$('chat-input').value='';currentJob=result.job;poll(result.job);}
     catch(e){setBusy(false);mood('idle');toast(e.message);}
   }
@@ -115,7 +129,22 @@
   }
   $('memory-form').addEventListener('submit',async event=>{event.preventDefault();try{await api('memory',{text:$('memory-input').value});$('memory-input').value='';await loadMemory();}catch(e){toast(e.message);}});
   for(const [id,key] of [['auto-speak','auto_speak'],['animation','animation']])$(id).addEventListener('change',async event=>{try{await api('settings',{[key]:event.target.checked});if(key==='animation')root.dataset.motion=event.target.checked?'on':'off';}catch(e){toast(e.message);}});
-  $('model-select').addEventListener('change',async event=>{try{await api('settings',{model:event.target.value});await refresh();toast('Local model updated.');}catch(e){toast(e.message);}});
+  $('model-select').addEventListener('change',async event=>{try{await api('settings',{model:event.target.value});await refresh();toast('AI model updated.');}catch(e){toast(e.message);}});
+  $('ai-mode').addEventListener('change',()=>{$('remote-model-settings').hidden=$('ai-mode').value!=='remote';});
+  $('save-remote-model').addEventListener('click',async()=>{
+    const endpoint=$('remote-endpoint').value.trim();
+    if($('ai-mode').value==='remote'&&!endpoint){$('remote-model-feedback').textContent='Enter the HTTPS base URL first.';return;}
+    const payload={ai_mode:$('ai-mode').value,remote_endpoint:endpoint};
+    if($('remote-token').value.trim())payload.remote_token=$('remote-token').value.trim();
+    $('save-remote-model').disabled=true;$('remote-model-feedback').textContent='Connecting…';
+    try{await api('settings',payload);$('remote-token').value='';await refresh();toast(status.ready?'AI connection saved.':'Settings saved. Check the endpoint message below.');}
+    catch(e){$('remote-model-feedback').textContent=e.message;}
+    finally{$('save-remote-model').disabled=false;}
+  });
+  $('forget-remote-token').addEventListener('click',async()=>{
+    try{await api('settings',{clear_remote_token:true});$('remote-token').value='';await refresh();$('remote-model-feedback').textContent='Saved access token removed from local Nexus data.';}
+    catch(e){$('remote-model-feedback').textContent=e.message;}
+  });
   $('test-voice').addEventListener('click',async()=>{if(busy||listening||voicePreview)return;voicePreview=true;setBusy(false);mood('speaking');try{await api('voice/test',{});toast('Voice test finished.');}catch(e){toast(e.message);}finally{voicePreview=false;setBusy(false);mood('idle');}});
   async function loadActivity(){const items=await api('activity');$('activity-list').replaceChildren();if(!items.length){const p=document.createElement('p');p.className='n-small';p.textContent='No actions yet.';$('activity-list').append(p);}items.forEach(item=>{const row=document.createElement('div');row.className='n-activity';const title=document.createElement('strong');title.textContent=item.tool+' · '+new Date(item.created*1000).toLocaleTimeString();const result=document.createElement('pre');try{result.textContent=JSON.stringify(JSON.parse(item.result),null,2);}catch{result.textContent=item.result;}row.append(title,result);$('activity-list').append(row);});}
   $('refresh-activity').addEventListener('click',()=>loadActivity().catch(e=>toast(e.message)));

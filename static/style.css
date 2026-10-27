@@ -148,6 +148,13 @@ button:disabled {cursor:default;opacity:.5;}
 #nexus-shell .n-setting-row>span {min-width:0;}
 #nexus-shell .n-setting-row strong {display:block;font-size:13px;font-weight:550;}
 #nexus-shell .n-setting-row small {display:block;font-size:11px;color:var(--n-muted);margin-top:5px;line-height:1.6;max-width:440px;}
+#nexus-shell .n-remote-settings {padding:17px 20px 20px;border-bottom:1px solid var(--n-line);background:var(--n-side);}
+#nexus-shell .n-remote-field {display:grid;gap:8px;margin-bottom:14px;}
+#nexus-shell .n-remote-field strong {display:block;font-size:12px;font-weight:550;}
+#nexus-shell .n-remote-field small {display:block;font-size:11px;color:var(--n-muted);margin-top:4px;line-height:1.6;}
+#nexus-shell .n-remote-field input {width:100%;min-height:42px;padding:10px 12px;border:1px solid var(--n-line);border-radius:10px;background:var(--n-panel);color:var(--n-ink);}
+#nexus-shell .n-remote-actions {display:flex;gap:9px;flex-wrap:wrap;margin:5px 0 11px;}
+#nexus-shell #remote-model-feedback {min-height:18px;overflow-wrap:anywhere;}
 #nexus-shell .n-switch {appearance:none;-webkit-appearance:none;width:38px;height:23px;flex:none;position:relative;border:1px solid var(--n-line);border-radius:25px;background:var(--n-line);margin:0;cursor:pointer;}
 #nexus-shell .n-switch::after {content:'';position:absolute;width:17px;height:17px;top:2px;left:2px;border-radius:50%;background:var(--n-panel);transition:transform .2s;}
 #nexus-shell .n-switch:checked {background:var(--n-accent);border-color:var(--n-accent);}

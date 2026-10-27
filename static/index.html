@@ -75,7 +75,14 @@
         <section class="n-page n-settings" data-panel="settings" aria-label="Settings" hidden>
           <h2>Make it feel like you.</h2><p class="n-sub">Your companion, your preferences.</p>
           <div class="n-setting-group">
-            <label class="n-setting-row"><span><strong>Local AI model</strong><small id="model-hint">Automatic choice balances speed and memory</small></span><select id="model-select" aria-label="Local model"></select></label>
+            <label class="n-setting-row"><span><strong>AI connection</strong><small>Choose where Nexus sends chat requests</small></span><select id="ai-mode" aria-label="AI connection"><option value="local">Local Ollama · private</option><option value="remote">Remote Ollama · internet</option></select></label>
+            <div class="n-remote-settings" id="remote-model-settings" hidden>
+              <label class="n-remote-field"><span><strong>Remote Ollama base URL</strong><small>Use an HTTPS endpoint ending at the server root, without /api</small></span><input id="remote-endpoint" type="url" autocomplete="url" placeholder="https://your-model-server.example"></label>
+              <label class="n-remote-field"><span><strong>Access token</strong><small id="remote-token-state">Leave blank if your endpoint does not require one</small></span><input id="remote-token" type="password" autocomplete="new-password" placeholder="Paste token here"></label>
+              <div class="n-remote-actions"><button class="n-button primary" id="save-remote-model" type="button">Save and connect</button><button class="n-button" id="forget-remote-token" type="button">Forget token</button></div>
+              <p class="n-small" id="remote-model-feedback">Remote prompts are sent to that server. The token is stored only in Nexus's private local data folder.</p>
+            </div>
+            <label class="n-setting-row"><span><strong>AI model</strong><small id="model-hint">Automatic choice balances speed and memory</small></span><select id="model-select" aria-label="AI model"></select></label>
             <div class="n-setting-row"><div><strong>Voice</strong><small id="voice-name">English male</small></div><button class="n-button" id="test-voice">Listen</button></div>
             <label class="n-setting-row"><span><strong>Read replies aloud</strong><small>Offline speech on your computer</small></span><input class="n-switch" type="checkbox" id="auto-speak" checked></label>
             <label class="n-setting-row"><span><strong>Character animation</strong><small>Movement and expressions</small></span><input class="n-switch" type="checkbox" id="animation" checked></label>
@@ -88,7 +95,7 @@
           <h3 class="n-section-title">Activity</h3><p class="n-small">Actual tool results. Deleted files go to Trash.</p><button class="n-button" id="refresh-activity">Refresh activity</button><div id="activity-list"></div>
         </section>
       </main>
-      <footer class="n-footer"><span>Nexus <span class="n-footer-separator">/</span> Your space to think</span><span><span class="n-dot" aria-hidden="true"></span> On-device · English</span></footer>
+      <footer class="n-footer"><span>Nexus <span class="n-footer-separator">/</span> Your space to think</span><span><span class="n-dot" aria-hidden="true"></span> <span id="processing-location">On-device · English</span></span></footer>
     </div>
   </div>
   <div id="toast" role="status" aria-live="polite" hidden></div>

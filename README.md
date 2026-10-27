@@ -28,13 +28,19 @@ Explicit create/save commands preserve the supplied text directly. Other request
 
 ## Try a stronger model in Google Colab
 
-Open [`Nexus_Colab_GPU.ipynb`](Nexus_Colab_GPU.ipynb) in Google Colab, select a GPU runtime, and run the cells from top to bottom. The notebook uses Ollama with Qwen 3.5 9B by default; choose 4B in its first code cell if the assigned GPU has limited memory. Colab GPU types and availability change over time, and free runtimes can be stopped. The notebook keeps its chat in the Colab session and does not connect a public tunnel or access your Zorin computer. It is a model chat lab, not GPU acceleration for Nexus's local desktop-control tools.
+Open [`Nexus_Colab_GPU.ipynb`](Nexus_Colab_GPU.ipynb) in Google Colab, select a GPU runtime, and run the cells from top to bottom. The notebook uses Ollama with Qwen 3.5 9B by default; choose 4B in its first code cell if the assigned GPU has limited memory. Colab GPU types and availability change over time, and free runtimes can be stopped. The notebook keeps its chat in the Colab session; it does not connect to Nexus or provide a model endpoint. Colab's managed runtimes restrict some externally accessible services, so Nexus should connect to a separately hosted HTTPS Ollama-compatible API instead of exposing a Colab runtime. See the [Colab FAQ](https://research.google.com/colaboratory/intl/en-GB/faq.html) for its runtime limits.
 
-Release snapshots are marked with Git tags: `v0.1.0` is the local desktop version and `v0.2.0` adds this Colab notebook.
+## Connect Nexus to a remote model
+
+In **Settings → AI connection**, choose **Remote Ollama**, enter the HTTPS base URL of a trusted Ollama-compatible server, optionally add its bearer token, and choose **Save and connect**. Nexus checks the server's `/api/tags` endpoint and lists the models it provides. The URL must be HTTPS; plain HTTP is accepted only for localhost. The API token is kept in Nexus's private local data database and can be removed with **Forget token**. Nexus does not encrypt this token itself, so keep your Linux account and `.data` directory private.
+
+In Remote mode, Nexus sends the current conversation context and model tool definitions to that server. The conversation history and saved preferences remain in Nexus's local database, and approved desktop actions still run on the Zorin computer. Remote mode requires an internet connection and is not offline operation. You can switch back to **Local Ollama** or stop a temporary model server when testing is done.
+
+Release snapshots are marked with Git tags: `v0.1.0` is the local desktop version, `v0.2.0` adds the Colab notebook, and `v0.3.0` adds the Remote Ollama connection.
 
 ## Offline operation and voice
 
-Chat, local file tools, saved memory, speech recognition and speech synthesis run on this computer after setup. There is no cloud AI API key. Network services such as YouTube, Gmail and Telegram still need an internet connection to retrieve new content.
+In Local Ollama mode, chat, local file tools, saved memory, speech recognition and speech synthesis run on this computer after setup. Remote Ollama mode sends the current conversation context to the configured server. Network services such as YouTube, Gmail and Telegram still need an internet connection to retrieve new content.
 
 Speech uses the English **Alan** Piper voice; eSpeak is a fallback when the Piper assets are absent. Vosk handles English speech recognition. Microphone capture is push-to-talk, not always listening, and temporary audio files are removed after use. Disable automatic speech in Settings if you prefer text replies.
 
